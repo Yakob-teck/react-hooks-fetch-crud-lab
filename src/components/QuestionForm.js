@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function QuestionForm(props) {
+function QuestionForm({ addQuestion }) {
   const [formData, setFormData] = useState({
     prompt: "",
     answer1: "",
@@ -10,17 +10,41 @@ function QuestionForm(props) {
     correctIndex: 0,
   });
 
-  function handleChange(event) {
+  const handleChange = (event) => {
     setFormData({
       ...formData,
       [event.target.name]: event.target.value,
     });
-  }
+  };
 
-  function handleSubmit(event) {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formData);
-  }
+
+    // Prepare the new question object
+    const newQuestion = {
+      prompt: formData.prompt,
+      answers: [
+        formData.answer1,
+        formData.answer2,
+        formData.answer3,
+        formData.answer4,
+      ],
+      correctIndex: parseInt(formData.correctIndex),
+    };
+
+    // Call the function to add the new question
+    addQuestion(newQuestion);
+
+    // Clear the form fields (reset state)
+    setFormData({
+      prompt: "",
+      answer1: "",
+      answer2: "",
+      answer3: "",
+      answer4: "",
+      correctIndex: 0,
+    });
+  };
 
   return (
     <section>
@@ -78,10 +102,10 @@ function QuestionForm(props) {
             value={formData.correctIndex}
             onChange={handleChange}
           >
-            <option value="0">{formData.answer1}</option>
-            <option value="1">{formData.answer2}</option>
-            <option value="2">{formData.answer3}</option>
-            <option value="3">{formData.answer4}</option>
+            <option value="0">Answer 1</option>
+            <option value="1">Answer 2</option>
+            <option value="2">Answer 3</option>
+            <option value="3">Answer 4</option>
           </select>
         </label>
         <button type="submit">Add Question</button>
